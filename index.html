@@ -5,14 +5,30 @@
   <meta charset='utf-8'>
   <style>
   </style>
+  <script>
+function getParameterByName(name) { // https://stackoverflow.com/a/5158301/2336208
+  var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+  return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+  </script>
  </head>
  <body>
    <canvas id="canvas" width="600", height="600"></canvas>
+   <form method="get">
+     <div><label>Squares</label><input type="text" id="squares" name="squares"> number of rows and columns</div>
+     <div><label>Rate</label><input type="text" id="rate" name="rate"> seconds per example</div>
+     <div><label>Timer</label><input type="text" id="timer" name="timer"> length of game (in seconds)</div>
+     <button type="submit">Reload</button>
+   </form>
  </body>
  <script>
-const squares = 15; // number of squares
-const rate = 1.5; // seconds per example
-const timer = 210; // length of game in seconds
+const squares = getParameterByName('squares') || 15; // number of squares
+const rate = getParameterByName('rate') || 1.5; // seconds per example
+const timer = getParameterByName('timer') || 210; // length of game in seconds
+
+document.getElementById('squares').setAttribute('value', squares);
+document.getElementById('rate').setAttribute('value', rate);
+document.getElementById('timer').setAttribute('value', timer);
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
