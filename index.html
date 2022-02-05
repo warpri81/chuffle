@@ -7,12 +7,12 @@
   </style>
  </head>
  <body>
-   <canvas id="canvas" width="500", height="500"></canvas>
+   <canvas id="canvas" width="600", height="600"></canvas>
  </body>
  <script>
-const squares = 20; // number of squares
+const squares = 15; // number of squares
 const rate = 1.5; // seconds per example
-const timer = 300; // length of game in seconds
+const timer = 210; // length of game in seconds
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -58,7 +58,20 @@ function startGame(img) {
 }
 */
 
-loadImage('https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=49ed3252c0b2ffb49cf8b508892e452d')
+imageOptions = [
+     'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=49ed3252c0b2ffb49cf8b508892e452d',
+     'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/golden-retriever-royalty-free-image-506756303-1560962726.jpg?crop=0.672xw:1.00xh;0.166xw,0&resize=640:*',
+     'https://static.onecms.io/wp-content/uploads/sites/20/2021/10/04/alligator.jpg',
+     'https://static.wikia.nocookie.net/wildkratts/images/b/b0/American_Flamingo_RL.PNG/revision/latest?cb=20190430161532',
+     'https://www.native-instruments.com/typo3temp/pics/img-welcome-hero-picked-acoustic-welcome-47c4eec96d4d847293f871cafc7cad2f-m@2x.jpg',
+     'https://media.nationalgeographic.org/assets/photos/000/207/20782.jpg',
+     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqPb8Znm2ROgwrOu-PKWqQmns8q9bSlqquUA&usqp=CAU',
+     'https://cdn.britannica.com/66/101766-050-85FEF17D/Missouri-River-Gates-of-the-Mountains-Helena.jpg',
+     'https://images.squarespace-cdn.com/content/v1/578d280ed1758ea279df2aac/1525881338283-O86WGG2I9U2Y8YRSMPAQ/image-asset.jpeg?format=1000w',
+     'https://www.google.com/url?sa=i&url=https%3A%2F%2Fbetterchickencommitment.com%2F&psig=AOvVaw3NsaNVwrL5ZSqB9guBaD0Q&ust=1644189262664000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCLD3vLzY6fUCFQAAAAAdAAAAABAD',
+];
+
+loadImage(imageOptions[Math.floor(Math.random() * imageOptions.length)])
   .then((img) => {
     // startGame(img);
 
