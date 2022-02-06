@@ -58,22 +58,6 @@ function update(img, chance) {
   }
 }
 
-/*
-function startGame(img) {
-  let alpha = 1;
-  function drawFrame() {
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    alpha -= 0.005;
-    if (alpha >= 0) {
-      window.requestAnimationFrame(drawFrame);
-    }
-  }
-  window.requestAnimationFrame(drawFrame);
-}
-*/
-
 imageOptions = [
      'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=49ed3252c0b2ffb49cf8b508892e452d',
      'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/golden-retriever-royalty-free-image-506756303-1560962726.jpg?crop=0.672xw:1.00xh;0.166xw,0&resize=640:*',
@@ -89,8 +73,6 @@ imageOptions = [
 
 loadImage(imageOptions[Math.floor(Math.random() * imageOptions.length)])
   .then((img) => {
-    // startGame(img);
-
     let chance = 0;
     setInterval(() => {
       update(img, chance);
