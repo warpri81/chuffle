@@ -112,6 +112,7 @@ loadImage(imageOptions[Math.floor(Math.random() * imageOptions.length)])
       hover = [x, y];
       update(img);
     });
+    canvas.addEventListener('mouseout', () => { hover = null; update(img); });
   });
  </script>
 </html>
