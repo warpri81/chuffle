@@ -10,28 +10,40 @@ function getParameterByName(name) { // https://stackoverflow.com/a/5158301/23362
   var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
   return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
+
+Array.matrix = function(numrows, numcols, initial) {
+    var arr = [];
+    for (var i = 0; i < numrows; ++i) {
+        var columns = [];
+        for (var j = 0; j < numcols; ++j) {
+            columns[j] = initial;
+        }
+        arr[i] = columns;
+    }
+    return arr;
+}
   </script>
  </head>
  <body>
    <canvas id="canvas" width="600", height="600"></canvas>
    <form method="get">
      <div><label>Squares</label><input type="text" id="squares" name="squares"> number of rows and columns</div>
-     <div><label>Rate</label><input type="text" id="rate" name="rate"> seconds per example</div>
-     <div><label>Timer</label><input type="text" id="timer" name="timer"> length of game (in seconds)</div>
      <button type="submit">Reload</button>
    </form>
  </body>
  <script>
 const squares = getParameterByName('squares') || 15; // number of squares
-const rate = getParameterByName('rate') || 1.5; // seconds per example
-const timer = getParameterByName('timer') || 210; // length of game in seconds
 
 document.getElementById('squares').setAttribute('value', squares);
-document.getElementById('rate').setAttribute('value', rate);
-document.getElementById('timer').setAttribute('value', timer);
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+
+const squareStates = Array.matrix(
+  Math.ceil(canvas.width / squares),
+  Math.ceil(canvas.height / squares),
+  true
+);
 
 function loadImage(url) {
   return new Promise((resolve, reject) => {
@@ -43,11 +55,17 @@ function loadImage(url) {
   });
 }
 
-function update(img, chance) {
+function handleGridClick(event) {
+  const x = event.pageX - canvas.offsetLeft + canvas.clientLeft;
+  const y = event.pageY - canvas.offsetTop + canvas.clientTop;
+  squareStates[Math.floor(x / (canvas.width / squares))][Math.floor(y / (canvas.height / squares))] = false;
+}
+
+function update(img) {
   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
   for (let x = 0; x < squares; x++) {
     for (let y = 0; y < squares; y++) {
-      if (Math.random() > chance) {
+      if (squareStates[x][y]) {
         ctx.fillStyle = 'white';
         ctx.fillRect(x * canvas.width / squares,
                      y * canvas.height / squares,
@@ -73,11 +91,11 @@ imageOptions = [
 
 loadImage(imageOptions[Math.floor(Math.random() * imageOptions.length)])
   .then((img) => {
-    let chance = 0;
-    setInterval(() => {
-      update(img, chance);
-      chance += (rate / timer);
-    }, rate * 1000);
+    update(img);
+    canvas.addEventListener('click', (event) => {
+      handleGridClick(event);
+      update(img);
+    });
   });
  </script>
 </html>
