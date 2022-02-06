@@ -27,7 +27,7 @@ Array.matrix = function(numrows, numcols, initial) {
  <body>
    <canvas id="canvas" width="600", height="600" style="border: 1px solid #6e6e6e;"></canvas>
    <div>
-     <input type="text" id="guess" /><button id="makeGuess">Make Guess</button>
+     <input type="text" id="guess" /><button id="make-guess">Make Guess</button>
    </div>
    <div>
      <form method="get">
@@ -152,6 +152,14 @@ loadImage(game.selectedImage['src'])
       update(img);
     });
     canvas.addEventListener('mouseout', () => { game.hover = null; update(img); });
+
+    document.getElementById('make-guess').addEventListener('click', (event) => {
+      if (document.getElementById('guess').value.toLowerCase() == game.selectedImage['answer'].toLowerCase()) {
+        alert(`You guessed right in ${game.guesses} guesses! Nice.`);
+      } else {
+        alert('nope :(');
+      }
+    });
   });
  </script>
 </html>
