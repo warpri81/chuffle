@@ -199,7 +199,7 @@ loadImage(game.selectedImage['src'])
 
     document.getElementById('guess-form').addEventListener('submit', (event) => {
       if (document.getElementById('guess-text').value.toLowerCase() == game.selectedImage['answer'].toLowerCase()) {
-        alert(`You guessed right in ${game.guesses} guesses! Nice.`);
+        alert(`You guessed right after ${game.guesses} squares! Nice.`);
       } else {
         alert('nope :(');
       }
