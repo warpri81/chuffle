@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html lang='en'>
  <head>
-  <title>Basic HTML5 document</title>
+  <title>Chuffle</title>
   <meta charset='utf-8'>
   <style>
+#guess-text {
+  width: 250px;
+}
+
+#settings-container {
+  margin-top: 50px;
+}
   </style>
   <script>
 function getParameterByName(name) { // https://stackoverflow.com/a/5158301/2336208
@@ -25,17 +32,22 @@ Array.matrix = function(numrows, numcols, initial) {
   </script>
  </head>
  <body>
+   <h1>Chuffle</h1>
+   <p>Click to reveal parts of the picture. Guess what it is.</p>
    <canvas id="canvas" width="600", height="600" style="border: 1px solid #6e6e6e;"></canvas>
-   <div>
+   <div id="guess-container">
      <form id="guess-form">
-       <input type="text" id="guess" />
+       <input type="text" id="guess-text" />
        <button id="make-guess">Make Guess</button>
      </form>
    </div>
-   <div>
+   <div id="settings-container">
+     <h2>Settings</h2>
      <form id="settings-form" method="get">
-       <div><label>Squares</label><input type="text" id="squares" name="squares"> number of rows and columns</div>
-       <button type="submit">Reload</button>
+       <label>Squares</label>
+       <input type="text" id="squares" name="squares" />
+       number of rows and columns
+       <button type="submit">Reload Game</button>
      </form>
    </div>
  </body>
@@ -157,7 +169,7 @@ loadImage(game.selectedImage['src'])
     canvas.addEventListener('mouseout', () => { game.hover = null; update(img); });
 
     document.getElementById('guess-form').addEventListener('submit', (event) => {
-      if (document.getElementById('guess').value.toLowerCase() == game.selectedImage['answer'].toLowerCase()) {
+      if (document.getElementById('guess-text').value.toLowerCase() == game.selectedImage['answer'].toLowerCase()) {
         alert(`You guessed right in ${game.guesses} guesses! Nice.`);
       } else {
         alert('nope :(');
