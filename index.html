@@ -38,12 +38,15 @@ document.getElementById('squares').setAttribute('value', squares);
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+const squareWidth = canvas.width / squares;
+const squareHeight = canvas.height / squares;
 
 const squareStates = Array.matrix(
-  Math.ceil(canvas.width / squares),
-  Math.ceil(canvas.height / squares),
+  Math.ceil(squareWidth),
+  Math.ceil(squareHeight),
   true
 );
+let hover = null;
 
 function loadImage(url) {
   return new Promise((resolve, reject) => {
@@ -58,7 +61,7 @@ function loadImage(url) {
 function handleGridClick(event) {
   const x = event.pageX - canvas.offsetLeft + canvas.clientLeft;
   const y = event.pageY - canvas.offsetTop + canvas.clientTop;
-  squareStates[Math.floor(x / (canvas.width / squares))][Math.floor(y / (canvas.height / squares))] = false;
+  squareStates[Math.floor(x / squareWidth)][Math.floor(y / squareHeight)] = false;
 }
 
 function update(img) {
@@ -67,12 +70,19 @@ function update(img) {
     for (let y = 0; y < squares; y++) {
       if (squareStates[x][y]) {
         ctx.fillStyle = 'white';
-        ctx.fillRect(x * canvas.width / squares,
-                     y * canvas.height / squares,
-                     canvas.width / squares,
-                     canvas.height / squares);
+        ctx.fillRect(x * squareWidth,
+                     y * squareHeight,
+                     squareWidth,
+                     squareHeight);
       }
     }
+  }
+  if (hover !== null) {
+    ctx.fillStyle = 'rgba(127, 255, 127, 0.3)';
+    ctx.fillRect(Math.floor(hover[0] / squareWidth) * squareWidth,
+                 Math.floor(hover[1] / squareHeight) * squareHeight,
+                 squareWidth,
+                 squareHeight);
   }
 }
 
@@ -94,6 +104,12 @@ loadImage(imageOptions[Math.floor(Math.random() * imageOptions.length)])
     update(img);
     canvas.addEventListener('click', (event) => {
       handleGridClick(event);
+      update(img);
+    });
+    canvas.addEventListener('mousemove', (event) => {
+      const x = event.pageX - canvas.offsetLeft + canvas.clientLeft;
+      const y = event.pageY - canvas.offsetTop + canvas.clientTop;
+      hover = [x, y];
       update(img);
     });
   });
