@@ -46,15 +46,6 @@ const ctx = canvas.getContext('2d');
 const squareWidth = canvas.width / squares;
 const squareHeight = canvas.height / squares;
 
-let guesses = 0;
-
-const squareStates = Array.matrix(
-  Math.ceil(squareWidth),
-  Math.ceil(squareHeight),
-  true
-);
-let hover = null;
-
 function loadImage(url) {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -70,10 +61,10 @@ function handleGridClick(event) {
   const clickY = event.pageY - canvas.offsetTop + canvas.clientTop;
   const x = Math.floor(clickX / squareWidth);
   const y = Math.floor(clickY / squareHeight)
-  if (squareStates[x][y] === true) {
-    squareStates[x][y] = false;
-    guesses += 1;
-    console.log(guesses);
+  if (game.squares[x][y] === true) {
+    game.squares[x][y] = false;
+    game.guesses += 1;
+    console.log(game.guesses);
   }
 }
 
@@ -81,7 +72,7 @@ function update(img) {
   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
   for (let x = 0; x < squares; x++) {
     for (let y = 0; y < squares; y++) {
-      if (squareStates[x][y]) {
+      if (game.squares[x][y]) {
         ctx.fillStyle = 'white';
         ctx.fillRect(x * squareWidth,
                      y * squareHeight,
@@ -90,10 +81,10 @@ function update(img) {
       }
     }
   }
-  if (hover !== null) {
+  if (game.hover !== null) {
     ctx.fillStyle = 'rgba(127, 255, 127, 0.3)';
-    ctx.fillRect(Math.floor(hover[0] / squareWidth) * squareWidth,
-                 Math.floor(hover[1] / squareHeight) * squareHeight,
+    ctx.fillRect(Math.floor(game.hover[0] / squareWidth) * squareWidth,
+                 Math.floor(game.hover[1] / squareHeight) * squareHeight,
                  squareWidth,
                  squareHeight);
   }
@@ -138,9 +129,16 @@ imageOptions = [
      },
 ];
 
-const selectedImage = imageOptions[Math.floor(Math.random() * imageOptions.length)]
 
-loadImage(selectedImage['src'])
+const game = {
+  guesses: 0,
+  squares: Array.matrix(Math.ceil(squareWidth), Math.ceil(squareHeight), true),
+  hover: null,
+  selectedImage: imageOptions[Math.floor(Math.random() * imageOptions.length)],
+}
+
+
+loadImage(game.selectedImage['src'])
   .then((img) => {
     update(img);
     canvas.addEventListener('click', (event) => {
@@ -150,10 +148,10 @@ loadImage(selectedImage['src'])
     canvas.addEventListener('mousemove', (event) => {
       const x = event.pageX - canvas.offsetLeft + canvas.clientLeft;
       const y = event.pageY - canvas.offsetTop + canvas.clientTop;
-      hover = [x, y];
+      game.hover = [x, y];
       update(img);
     });
-    canvas.addEventListener('mouseout', () => { hover = null; update(img); });
+    canvas.addEventListener('mouseout', () => { game.hover = null; update(img); });
   });
  </script>
 </html>
