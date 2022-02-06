@@ -41,6 +41,8 @@ const ctx = canvas.getContext('2d');
 const squareWidth = canvas.width / squares;
 const squareHeight = canvas.height / squares;
 
+let guesses = 0;
+
 const squareStates = Array.matrix(
   Math.ceil(squareWidth),
   Math.ceil(squareHeight),
@@ -59,9 +61,15 @@ function loadImage(url) {
 }
 
 function handleGridClick(event) {
-  const x = event.pageX - canvas.offsetLeft + canvas.clientLeft;
-  const y = event.pageY - canvas.offsetTop + canvas.clientTop;
-  squareStates[Math.floor(x / squareWidth)][Math.floor(y / squareHeight)] = false;
+  const clickX = event.pageX - canvas.offsetLeft + canvas.clientLeft;
+  const clickY = event.pageY - canvas.offsetTop + canvas.clientTop;
+  const x = Math.floor(clickX / squareWidth);
+  const y = Math.floor(clickY / squareHeight)
+  if (squareStates[x][y] === true) {
+    squareStates[x][y] = false;
+    guesses += 1;
+    console.log(guesses);
+  }
 }
 
 function update(img) {
