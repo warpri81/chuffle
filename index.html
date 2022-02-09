@@ -12,6 +12,34 @@
 #settings-container {
   margin-top: 50px;
 }
+
+#guess-container {
+  margin-top: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #ededed;
+  width: 600px;
+  text-align: center;
+}
+
+#guess-container input.guess-letter {
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid gray;
+  display: inline-block;
+  font-size: 20px;
+  margin: 0 5px;
+  width: 1.5rem;
+  text-align: center;
+}
+
+#guess-container input#make-guess {
+    background-color: #00cc66;
+    border: 0;
+    color: #fff;
+    margin-top: 20px;
+    padding: 10px;
+}
   </style>
   <script>
 function getParameterByName(name) { // https://stackoverflow.com/a/5158301/2336208
@@ -38,8 +66,9 @@ Array.matrix = function(numrows, numcols, initial) {
    <canvas id="canvas" width="600", height="600" style="border: 1px solid #6e6e6e;"></canvas>
    <div id="guess-container">
      <form id="guess-form">
-       <input type="text" id="guess-text" />
-       <button id="make-guess">Make Guess</button>
+       <div id="guess-word">
+       </div>
+       <input type="submit" id="make-guess" value="Make Guess">
      </form>
    </div>
    <div id="settings-container">
@@ -182,12 +211,41 @@ const game = {
 }
 
 
+const guessForm = document.getElementById('guess-form');
+const guessWord = document.getElementById('guess-word');
+const charInputs = [];
+for (let c = 0; c < game.selectedImage['answer'].length; c++) {
+  let charInput = document.createElement('input');
+  charInput.className = 'guess-letter';
+  charInput.maxLength = 1;
+  charInput.addEventListener('keyup', (event) => {
+    const targetIndex = charInputs.findIndex(charInput => event.target == charInput);
+    if (event.target.value.length == event.target.maxLength) {
+      guessForm.querySelectorAll('input')[targetIndex+1].focus();
+    } else if (event.target.value.length == 0 && event.keyCode == 8) {
+      guessForm.querySelectorAll('input')[Math.max(0, targetIndex-1)].focus();
+    }
+  });
+  guessWord.appendChild(charInput);
+  charInputs.push(charInput);
+}
+charInputs[0].focus();
+
+function getGuessWord() {
+  let word = '';
+  for (let i = 0; i < charInputs.length; i++) {
+    word += charInputs[i].value;
+  }
+  return word;
+}
+
 loadImage(game.selectedImage['src'])
   .then((img) => {
     update(img);
     canvas.addEventListener('click', (event) => {
       handleGridClick(event);
       update(img);
+      charInputs[0].focus();
     });
     canvas.addEventListener('mousemove', (event) => {
       const x = event.pageX - canvas.offsetLeft + canvas.clientLeft;
@@ -198,7 +256,7 @@ loadImage(game.selectedImage['src'])
     canvas.addEventListener('mouseout', () => { game.hover = null; update(img); });
 
     document.getElementById('guess-form').addEventListener('submit', (event) => {
-      if (document.getElementById('guess-text').value.toLowerCase() == game.selectedImage['answer'].toLowerCase()) {
+      if (getGuessWord().toLowerCase() == game.selectedImage['answer'].toLowerCase()) {
         alert(`You guessed right after ${game.guesses} squares! Nice.`);
       } else {
         alert('nope :(');
