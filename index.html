@@ -74,17 +74,35 @@ Array.matrix = function(numrows, numcols, initial) {
    <div id="settings-container">
      <h2>Settings</h2>
      <form id="settings-form" method="get">
-       <label>Squares</label>
-       <input type="text" id="squares" name="squares" />
-       number of rows and columns
+       <div>
+         <label>Squares</label>
+         <input type="text" id="squares" name="squares">
+         number of rows and columns
+       </div>
+       <div>
+         <label>Image</label>
+         <input type="text" id="test-src" name="src">
+         test image to display
+       </div>
+       <div>
+         <label>Answer</label>
+         <input type="text" id="test-answer" name="answer">
+         test answer
+       </div>
        <button type="submit">Reload Game</button>
      </form>
    </div>
  </body>
  <script>
 const squares = getParameterByName('squares') || 15; // number of squares
+const testImage = {
+  src: getParameterByName('src') || '',
+  answer: getParameterByName('answer') || '',
+};
 
 document.getElementById('squares').setAttribute('value', squares);
+document.getElementById('test-src').setAttribute('value', testImage.src);
+document.getElementById('test-answer').setAttribute('value', testImage.answer);
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -208,6 +226,9 @@ const game = {
   squares: Array.matrix(Math.ceil(squareWidth), Math.ceil(squareHeight), true),
   hover: null,
   selectedImage: imageOptions[Math.floor(Math.random() * imageOptions.length)],
+}
+if (testImage.src && testImage.answer) {
+  game.selectedImage = testImage;
 }
 
 
